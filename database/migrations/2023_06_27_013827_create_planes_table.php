@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('planes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->decimal('price', 8, 2);
+            $table->unsignedInteger('sessions')->default(30);
             $table->timestamps();
         });
     }

@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('asistencias', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('gym_id');
+            $table->dateTime('attendance_time');
+            $table->foreign('user_dni')->references('dni')->on('users')->onDelete('cascade');
+            $table->foreign('gym_id')->references('id')->on('gimnasios')->onDelete('cascade');
         });
     }
 
