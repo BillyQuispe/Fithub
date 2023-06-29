@@ -24,7 +24,13 @@ Route::post('auth/register',[AuthController::class,'create']);
 Route::post('auth/login',[AuthController::class,'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    //Metodos para Gimnasios
+
+    
+    //Metodos para planes
     Route::post('/plan', [PlanController::class, 'store']);
+
+
 
     Route::get('auth/logout', [PlanController::class, 'logout']);
 });
