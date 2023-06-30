@@ -22,13 +22,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 Route::post('auth/register',[AuthController::class,'create']);
 Route::post('auth/login',[AuthController::class,'login']);
+Route::post('/plan', [PlanController::class, 'store']);
+Route::get('/plan', [PlanController::class, 'index']);
+Route::get('/plan/{id}', [PlanController::class, 'show']);
+Route::put('/plan/{id}', [PlanController::class, 'update']);
+Route::delete('/plan/{id}', [PlanController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->group(function () {
     //Metodos para Gimnasios
 
     
     //Metodos para planes
-    Route::post('/plan', [PlanController::class, 'store']);
+    
 
 
 
