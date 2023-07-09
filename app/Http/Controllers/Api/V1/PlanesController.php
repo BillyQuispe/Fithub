@@ -7,6 +7,8 @@ use App\Models\Planes;
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\PlanResource;
 use App\Http\Resources\V1\PlanCollection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Validator;
 
 class PlanesController extends Controller
 {
@@ -18,7 +20,20 @@ class PlanesController extends Controller
     public function index()
     {
         //
-        return new PlanCollection(Planes::class);
+        $planes = Planes::all();
+        if ($planes) {
+            $cantidad = $planes->count();
+            return response()->json([
+                "status" => 200,
+                "message" => "Se han encontrado $cantidad PLanes",
+                "data" => $planes
+            ]);
+        } else {
+            return response()->json([
+                "status" => 400,
+                "message" => "No se encontro Planes"
+            ], 400);
+        }
     }
 
     /**
@@ -30,18 +45,32 @@ class PlanesController extends Controller
     public function store(Request $request)
     {
         // Validar los datos de entrada
-        $validatedData = $request->validate([
+        $validatedData =  Validator::make($request->all(),[
             'name' => 'required|string',
             'description' => 'required|string',
-            'preci' => 'required|numeric',
-            'cupones' => 'nullable|array'
+            'preci' => 'required',
+            'cupones' => 'required'
         ]);
+        if ($validatedData->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => "Datos Invalidos",
+                'error' => $validatedData->errors(),
+            ], 400);
+        }
 
         // Nuevo plan
-        $plan = Planes::create($validatedData);
-
-        // Retornar el plan creado
-        return new PlanResource($plan);
+        $plan = Planes::create([
+            'name' => $request->input("name"),
+            'description' => $request->input("description"),
+            'preci' => $request->input("preci"),
+            'cupones' => $request->input("cupones")
+        ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Plan creado!',
+            'data' => $plan
+        ], 200);
     }
 
     /**
@@ -50,11 +79,29 @@ class PlanesController extends Controller
      * @param  \App\Models\Planes  $planes
      * @return \Illuminate\Http\Response
      */
-    public function show(Planes $planes)
-    {
-        //
-        return new PlanResource($planes);
+    public function show($name)
+{
+    // Buscar el plan por su nombre
+    $mostrarplan = Planes::where('name', $name)->get();
+
+    // Verificar si se encontró el plan
+    if ($mostrarplan->isNotEmpty()) {
+        $cantidad = $mostrarplan->count();
+
+        return response()->json([
+            "status" => 200,
+            "message" => "Se han encontrado $cantidad planes",
+            "data" => $mostrarplan
+        ]);
+    } else {
+        return response()->json([
+            "status" => 400,
+            "message" => "No existe plan",
+            "data" => []
+        ], 400);
     }
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -74,8 +121,25 @@ class PlanesController extends Controller
      * @param  \App\Models\Planes  $planes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Planes $planes)
-    {
-        //
+    public function destroy($id)
+{
+    // Buscar el plan por su id
+    $plan = Planes::find($id);
+
+    if ($plan) {
+        // Eliminar el plan
+        $plan->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Plan eliminado correctamente',
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Plan no encontrado',
+        ], 400);
     }
+}
+
 }

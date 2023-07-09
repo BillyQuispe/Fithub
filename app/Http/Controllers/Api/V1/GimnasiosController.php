@@ -18,7 +18,7 @@ class GimnasiosController extends Controller
     public function index()
     {
         //
-        return new GimnasioCollection(Gimnasios::latest()->paginate());
+       // return new GimnasioCollection(Gimnasios::latest()->paginate());
     }
 
     /**
@@ -41,7 +41,7 @@ class GimnasiosController extends Controller
     public function show(Gimnasios $gimnasios)
     {
         //
-        return new GimnasioResource($gimnasios);
+        //return new GimnasioResource($gimnasios);
     }
 
     /**

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('v1/gimnasios',\App\Http\Controllers\Api\V1\GimnasiosController::class)->only('show','store','update','destroy');
+Route::apiResource('v1/planes',\App\Http\Controllers\Api\V1\PlanesController::class);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
