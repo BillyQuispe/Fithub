@@ -29,8 +29,19 @@ class PlanesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        
+        // Validar los datos de entrada
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'preci' => 'required|numeric',
+            'cupones' => 'nullable|array'
+        ]);
+
+        // Nuevo plan
+        $plan = Planes::create($validatedData);
+
+        // Retornar el plan creado
+        return new PlanResource($plan);
     }
 
     /**
