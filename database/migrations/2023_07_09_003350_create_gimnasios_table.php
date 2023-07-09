@@ -15,17 +15,23 @@ return new class extends Migration
     {
         Schema::create('gimnasios', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+               // $table->string('logo')->nullable();
+           $table->string('geolocalizacion');
+                //$table->string('ruc')->nullable();
+            $table->integer('aforo');
+            $table->string('horarios_atencion');
             $table->timestamps();
         });
+            
     }
-
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('gimnasios');
-    }
+     public function down()
+      {
+        Schema::dropIfExists('planes');
+      }
 };
