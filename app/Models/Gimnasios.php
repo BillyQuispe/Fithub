@@ -3,9 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Gimnasios extends Model
 {
     use HasFactory;
+
+    protected $collection = "gimnasios";
+
+    protected $fillable = [
+        'nombre',
+        'logo',
+        'geocalizacion',
+        'ruc',
+        'aforo',
+        'horarios_atencion'
+    ];
 }
