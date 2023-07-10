@@ -14,7 +14,6 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Ejecutar migraciones
-RUN composer install
 RUN php artisan migrate
 
 # Exponer el puerto 8000 en lugar del puerto 80
