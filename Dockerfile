@@ -3,6 +3,9 @@ FROM php:8.0-apache
 # Instalar extensiones de PHP necesarias
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Instalar dependencias necesarias para la extensión mongodb
+RUN apt-get update && apt-get install -y libssl-dev
+
 # Instalar el cliente de MongoDB para PHP
 RUN pecl install mongodb && \
     docker-php-ext-enable mongodb
