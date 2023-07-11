@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Gimnasios extends Model
+class usuarios extends Model
 {
     use HasFactory;
-    protected $collection = "gimnasios";
+    protected $collection = "usuarios";
 
     protected $fillable = [
         'nombre',
-        // 'logo',
-        'geolocalizacion',
-        'ruc',
-        'aforo',
-        'horarios_atencion' 
+        'asistencia'
     ];
 }
