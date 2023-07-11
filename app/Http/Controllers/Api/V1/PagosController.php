@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pagos;
+use App\Models\usuarios;
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\PagoResource;
 use App\Http\Resources\V1\PagoCollection;
 use Illuminate\Support\Facades\Validator;
+<<<<<<< HEAD
+use Illuminate\Support\Facades\Storage;
+
+=======
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
 
 class PagosController extends Controller
 {
@@ -37,14 +43,63 @@ class PagosController extends Controller
             ], 400);
         }
     }
+<<<<<<< HEAD
+   /**
+=======
 
     /**
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+<<<<<<< HEAD
+{
+    // Validar los datos de entrada
+    $validatedData = Validator::make($request->all(), [
+        'id_usuario' => 'required',
+        'foto' => 'required|file|mimes:jpg,png,gif,pdf|max:3000',
+    ]);
+
+    if ($validatedData->fails()) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Datos inválidos',
+            'error' => $validatedData->errors(),
+        ], 400);
+    }
+
+    // Obtener el usuario por su id
+    $usuario = usuarios::find($request->input('id_usuario'));
+
+    if (!$usuario) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Usuario no encontrado',
+        ], 400);
+    }
+
+    // Subir la imagen y guardar la URL en la base de datos
+    //$path = $request->file('foto')->store('voucher');
+     // Subir la imagen y obtener la ruta del archivo
+  
+  
+
+     // Crear un nuevo pago
+     $pago = new Pagos();
+     $pago->id_usuario = $usuario->id;
+     $pago->foto = $request->file('foto')->storage('voucher');
+     $pago->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Pago creado exitosamente',
+        'data' => $pago,
+    ], 200);
+}
+=======
     {
         // Validar los datos de entrada
         $validatedData = Validator::make($request->all(), [
@@ -156,6 +211,7 @@ class PagosController extends Controller
             ], 400);
         }
     }
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
 
     /**
      * Remove the specified resource from storage.
@@ -182,6 +238,10 @@ class PagosController extends Controller
                 'status' => 400,
                 'message' => 'Pago no encontrado',
             ], 400);
+<<<<<<< HEAD
+        }
+=======
          }
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
     }
 };

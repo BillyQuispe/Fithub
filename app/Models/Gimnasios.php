@@ -8,15 +8,14 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class Gimnasios extends Model
 {
     use HasFactory;
-
     protected $collection = "gimnasios";
 
     protected $fillable = [
         'nombre',
-        'logo',
-        'geocalizacion',
+        // 'logo',
+        'geolocalizacion',
         'ruc',
         'aforo',
-        'horarios_atencion'
-    ];
+        'horarios_atencion' 
+ ];
 }

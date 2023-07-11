@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nombre');
                // $table->string('logo')->nullable();
            $table->string('geolocalizacion');
-                //$table->string('ruc')->nullable();
+            $table->string('ruc')->nullable();
             $table->integer('aforo');
             $table->string('horarios_atencion');
             $table->timestamps();

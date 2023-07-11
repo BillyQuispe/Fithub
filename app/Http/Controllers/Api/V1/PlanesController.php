@@ -19,21 +19,15 @@ class PlanesController extends Controller
      */
     public function index()
     {
-        //
         $planes = Planes::all();
-        if ($planes) {
-            $cantidad = $planes->count();
-            return response()->json([
-                "status" => 200,
-                "message" => "Se han encontrado $cantidad PLanes",
-                "data" => $planes
-            ]);
-        } else {
-            return response()->json([
-                "status" => 400,
-                "message" => "No se encontro Planes"
-            ], 400);
-        }
+
+
+
+        return response()->json([
+            "status" => 200,
+            "message" => "Se encontraron " . $planes->count() . " planes en la base de datos.",
+            "data" => $planes
+        ]);
     }
 
     /**
@@ -51,10 +45,11 @@ class PlanesController extends Controller
             'preci' => 'required',
             'cupones' => 'required'
         ]);
+
         if ($validatedData->fails()) {
             return response()->json([
                 'status' => 400,
-                'message' => "Datos Invalidos",
+                'message' => "Datos inválidos",
                 'error' => $validatedData->errors(),
             ], 400);
         }
@@ -66,9 +61,10 @@ class PlanesController extends Controller
             'preci' => $request->input("preci"),
             'cupones' => $request->input("cupones")
         ]);
+
         return response()->json([
             'status' => 200,
-            'message' => 'Plan creado!',
+            'message' => 'Plan creado exitosamente',
             'data' => $plan
         ], 200);
     }
@@ -80,28 +76,23 @@ class PlanesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($name)
-{
-    // Buscar el plan por su nombre
-    $mostrarplan = Planes::where('name', $name)->get();
+    {
+        $mostrarplan = Planes::where('name', $name)->get();
 
-    // Verificar si se encontró el plan
-    if ($mostrarplan->isNotEmpty()) {
-        $cantidad = $mostrarplan->count();
+        if ($mostrarplan->isEmpty()) {
+            return response()->json([
+                "status" => 400,
+                "message" => "No se encontró el plan",
+                "data" => []
+            ], 400);
+        }
 
         return response()->json([
             "status" => 200,
-            "message" => "Se han encontrado $cantidad planes",
+            "message" => "Se encontró el plan",
             "data" => $mostrarplan
         ]);
-    } else {
-        return response()->json([
-            "status" => 400,
-            "message" => "No existe plan",
-            "data" => []
-        ], 400);
     }
-}
-
 
     /**
      * Update the specified resource in storage.
@@ -110,8 +101,30 @@ class PlanesController extends Controller
      * @param  \App\Models\Planes  $planes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Planes $planes)
+    public function update(Request $request, $id)
     {
+<<<<<<< HEAD
+        $plan = Planes::find($id);
+
+        if (!$plan) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'No se encontró el plan',
+            ], 400);
+        }
+
+        $plan->name = $request->input('name');
+        $plan->description = $request->input('description');
+        $plan->preci = $request->input('preci');
+        $plan->cupones = $request->input('cupones');
+        $plan->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Plan actualizado exitosamente',
+            'data' => $plan,
+        ], 200);
+=======
           // Validar los datos de entrada
     $validatedData = Validator::make($request->all(), [
         'name' => 'required|string',
@@ -140,6 +153,7 @@ class PlanesController extends Controller
         'message' => 'Plan actualizado correctamente',
         'data' => $planes
     ], 200);
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
     }
 
     /**
@@ -149,24 +163,21 @@ class PlanesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-{
-    // Buscar el plan por su id
-    $plan = Planes::find($id);
+    {
+        $plan = Planes::find($id);
 
-    if ($plan) {
-        // Eliminar el plan
+        if (!$plan) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'No se encontró el plan',
+            ], 400);
+        }
+
         $plan->delete();
 
         return response()->json([
             'status' => 200,
             'message' => 'Plan eliminado correctamente',
         ], 200);
-    } else {
-        return response()->json([
-            'status' => 400,
-            'message' => 'Plan no encontrado',
-        ], 400);
     }
-}
-
 }

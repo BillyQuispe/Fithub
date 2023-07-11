@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('plan_id');
-            $table->longText('voucher');
+            $table->integer('id_usuarios');
+            $table->date('fecha');
+            $table->string('nro_operacion');
+            $table->decimal('monto', 8, 2);
+            $table->string('estado');
+            // Agregar el nuevo campo 'foto'
+            $table->string('foto');
             $table->timestamps();
-            //$table->foreign('user_id')->references('id')->on('users');
-            //$table->foreign('plan_id')->references('id')->on('planes'); 
+            $table->foreign('id_usuarios')->references('id')->on('usuarios');
         });
     }
 
