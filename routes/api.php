@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('login',[App\Http\Controllers\Api\LoginController::class, 'login']);
 Route::get('register', [\App\Http\Controllers\Api\RegisterController::class, 'index']);
 Route::post('register', \App\Http\Controllers\Api\RegisterController::class)->only('show','store','update','destroy');
+Route::put('register', \App\Http\Controllers\Api\RegisterController::class)->only('show','store','update','destroy');
+Route::delete('register', \App\Http\Controllers\Api\RegisterController::class)->only('show','store','update','destroy');
+
 
 //
 
