@@ -13,7 +13,8 @@ class Pagos extends Model
 
     protected $fillable = [
         'cod_usuario',
-        'fecha',
+        'foto',
+        'fecha_subida',
         'nro_operacion',
         'monto',
         'estado'
