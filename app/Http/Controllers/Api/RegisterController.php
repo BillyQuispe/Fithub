@@ -8,6 +8,19 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $users = User::all();
+
+        return response()->json([
+            'data' => $users,
+        ], 200);
+    }
     /**
      * Store a newly created resource in storage.
      *
