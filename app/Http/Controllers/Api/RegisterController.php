@@ -21,6 +21,7 @@ class RegisterController extends Controller
             'data' => $users,
         ], 200);
     }
+    
     /**
      * Store a newly created resource in storage.
      *
