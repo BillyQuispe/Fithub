@@ -16,10 +16,19 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('v1/gimnasios',\App\Http\Controllers\Api\V1\GimnasiosController::class)->only('show','store','update','destroy');
+<<<<<<< HEAD
 Route::apiResource('v1/planes',\App\Http\Controllers\Api\V1\PlanesController::class);
 Route::apiResource('v1/pagos', \App\Http\Controllers\Api\V1\PagosController::class);
 Route::apiResource('v1/gimnasios', \App\Http\Controllers\Api\V1\GimnasiosController::class);
 Route::apiResource('v1/usuarios', \App\Http\Controllers\Api\V1\UsuariosController::class);
+=======
+Route::apiResource('v1/planes', \App\Http\Controllers\Api\V1\PlanesController::class)->except(['update']);
+Route::put('v1/planes/{plan}', [\App\Http\Controllers\Api\V1\PlanesController::class, 'update'])->name('planes.update');
+Route::delete('v1/planes/{plan}', [\App\Http\Controllers\Api\V1\PlanesController::class, 'destroy'])->name('planes.destroy');
+Route::apiResource('v1/pagos', \App\Http\Controllers\Api\V1\PagosController::class);
+Route::apiResource('v1/gimnasios', \App\Http\Controllers\Api\V1\GimnasiosController::class);
+Route::apiResource('v1/reseñas', \App\Http\Controllers\Api\V1\GimnasiosController::class);
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
 
 
 

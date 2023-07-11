@@ -17,5 +17,5 @@ class Gimnasios extends Model
         'ruc',
         'aforo',
         'horarios_atencion' 
-    ];
+ ];
 }

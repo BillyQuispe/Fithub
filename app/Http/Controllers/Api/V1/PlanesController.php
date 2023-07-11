@@ -103,6 +103,7 @@ class PlanesController extends Controller
      */
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
         $plan = Planes::find($id);
 
         if (!$plan) {
@@ -123,6 +124,36 @@ class PlanesController extends Controller
             'message' => 'Plan actualizado exitosamente',
             'data' => $plan,
         ], 200);
+=======
+          // Validar los datos de entrada
+    $validatedData = Validator::make($request->all(), [
+        'name' => 'required|string',
+        'description' => 'required|string',
+        'preci' => 'required',
+        'cupones' => 'required'
+    ]);
+
+    if ($validatedData->fails()) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Datos inválidos',
+            'error' => $validatedData->errors()
+        ], 400);
+    }
+
+    // Actualizar el plan
+    $planes->name = $request->input('name');
+    $planes->description = $request->input('description');
+    $planes->preci = $request->input('preci');
+    $planes->cupones = $request->input('cupones');
+    $planes->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Plan actualizado correctamente',
+        'data' => $planes
+    ], 200);
+>>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
     }
 
     /**
