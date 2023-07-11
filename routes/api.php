@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 // ****** LOGIN ********
 Route::post('login',[App\Http\Controllers\Api\LoginController::class, 'login']);
 Route::get('register', [\App\Http\Controllers\Api\RegisterController::class, 'index']);
-
+Route::apiResource('register', \App\Http\Controllers\Api\RegisterController::class);
 
 //
 
