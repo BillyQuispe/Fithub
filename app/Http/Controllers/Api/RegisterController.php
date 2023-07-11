@@ -15,12 +15,17 @@ class RegisterController extends Controller
      */
     public function index()
     {
+     
         $users = User::all();
 
         return response()->json([
-            'data' => $users,
-        ], 200);
+            "status" => 200,
+            "message" => "Se encontraron " . $users->count() . " usuarios en la base de datos.",
+            "data" => $users
+        ]);
     }
+    
+
     /**
      * Store a newly created resource in storage.
      *
