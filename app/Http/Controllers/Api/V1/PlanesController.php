@@ -21,12 +21,6 @@ class PlanesController extends Controller
     {
         $planes = Planes::all();
 
-        if ($planes->isEmpty()) {
-            return response()->json([
-                "status" => 400,
-                "message" => "No se encontraron planes en la base de datos.",
-            ], 400);
-        }
 
         return response()->json([
             "status" => 200,
