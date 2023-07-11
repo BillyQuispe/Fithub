@@ -16,7 +16,6 @@ class GimnasiosController extends Controller
      */
     public function index()
     {
-<<<<<<< HEAD
         $gimnasios = Gimnasios::all();
 
 
@@ -25,22 +24,6 @@ class GimnasiosController extends Controller
             'status' => 200,
             'message' => 'Se encontraron ' . $gimnasios->count() . ' gimnasios en la base de datos.',
             'data' => $gimnasios,
-=======
-        // Retrieve all the existing gyms from the database
-        $gyms = Gimnasios::all();
-
-        if ($gyms->isEmpty()) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'No se encontraron gimnasios',
-            ], 400);
-        }
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Se han encontrado gimnasios',
-            'data' => $gyms,
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
         ]);
     }
 
@@ -52,22 +35,14 @@ class GimnasiosController extends Controller
      */
     public function store(Request $request)
     {
-<<<<<<< HEAD
         $validatedData = Validator::make($request->all(), [
             'nombre' => 'required|string',
-=======
-        // Validate the input data
-        $validatedData = $request->validate([
-            'nombre' => 'required|string',
-            'logo' => 'required|image',
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
             'geolocalizacion' => 'required|string',
             'ruc' => 'required|string',
             'aforo' => 'required|integer',
             'horarios_atencion' => 'required|string',
         ]);
 
-<<<<<<< HEAD
         if ($validatedData->fails()) {
             return response()->json([
                 'status' => 400,
@@ -82,29 +57,12 @@ class GimnasiosController extends Controller
             'ruc' => $request->input('ruc'),
             'aforo' => $request->input('aforo'),
             'horarios_atencion' => $request->input('horarios_atencion'),
-=======
-        // Save the uploaded image
-        $logoPath = $request->file('logo')->move('images', $request->file('logo')->getClientOriginalName());
-
-        // Create a new gym
-        $gym = Gimnasios::create([
-            'nombre' => $validatedData['nombre'],
-            'logo' => $logoPath,
-            'geolocalizacion' => $validatedData['geolocalizacion'],
-            'ruc' => $validatedData['ruc'],
-            'aforo' => $validatedData['aforo'],
-            'horarios_atencion' => $validatedData['horarios_atencion'],
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
         ]);
 
         return response()->json([
             'status' => 200,
             'message' => 'Gimnasio creado exitosamente',
-<<<<<<< HEAD
             'data' => $gimnasio,
-=======
-            'data' => $gym,
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
         ], 200);
     }
 
@@ -116,7 +74,6 @@ class GimnasiosController extends Controller
      */
     public function show($id)
     {
-<<<<<<< HEAD
         $gimnasio = Gimnasios::find($id);
 
         if (!$gimnasio) {
@@ -130,12 +87,6 @@ class GimnasiosController extends Controller
             'status' => 200,
             'message' => 'Se encontró el gimnasio',
             'data' => $gimnasio,
-=======
-        return response()->json([
-            'status' => 200,
-            'message' => 'Gimnasio encontrado',
-            'data' => $gimnasios,
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
         ]);
     }
 
@@ -148,7 +99,6 @@ class GimnasiosController extends Controller
      */
     public function update(Request $request, $id)
     {
-<<<<<<< HEAD
         $gimnasio = Gimnasios::find($id);
 
         if (!$gimnasio) {
@@ -160,19 +110,12 @@ class GimnasiosController extends Controller
 
         $validatedData = Validator::make($request->all(), [
             'nombre' => 'string',
-=======
-        // Validate the input data
-        $validatedData = $request->validate([
-            'nombre' => 'string',
-            'logo' => 'image',
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
             'geolocalizacion' => 'string',
             'ruc' => 'string',
             'aforo' => 'integer',
             'horarios_atencion' => 'string',
         ]);
 
-<<<<<<< HEAD
         if ($validatedData->fails()) {
             return response()->json([
                 'status' => 400,
@@ -198,46 +141,11 @@ class GimnasiosController extends Controller
         }
 
         $gimnasio->save();
-=======
-        // Update the gym's fields if provided
-        if ($request->filled('nombre')) {
-            $gimnasios->nombre = $validatedData['nombre'];
-        }
-        if ($request->hasFile('logo')) {
-            // Delete the previous logo
-            if (file_exists(public_path($gimnasios->logo))) {
-                unlink(public_path($gimnasios->logo));
-            }
-
-            // Save the new logo image
-            $logoPath = $request->file('logo')->move('images', $request->file('logo')->getClientOriginalName());
-            $gimnasios->logo = $logoPath;
-        }
-        if ($request->filled('geolocalizacion')) {
-            $gimnasios->geolocalizacion = $validatedData['geolocalizacion'];
-        }
-        if ($request->filled('ruc')) {
-            $gimnasios->ruc = $validatedData['ruc'];
-        }
-        if ($request->filled('aforo')) {
-            $gimnasios->aforo = $validatedData['aforo'];
-        }
-        if ($request->filled('horarios_atencion')) {
-            $gimnasios->horarios_atencion = $validatedData['horarios_atencion'];
-        }
-
-        // Save the updated gym
-        $gimnasios->save();
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
 
         return response()->json([
             'status' => 200,
             'message' => 'Gimnasio actualizado exitosamente',
-<<<<<<< HEAD
             'data' => $gimnasio,
-=======
-            'data' => $gimnasios,
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
         ], 200);
     }
 
@@ -249,7 +157,6 @@ class GimnasiosController extends Controller
      */
     public function destroy($id)
     {
-<<<<<<< HEAD
         $gimnasio = Gimnasios::find($id);
 
         if (!$gimnasio) {
@@ -265,19 +172,5 @@ class GimnasiosController extends Controller
             'status' => 200,
             'message' => 'Gimnasio eliminado correctamente',
         ], 200);
-=======
-        // Delete the gym's logo
-        if (file_exists(public_path($gimnasios->logo))) {
-            unlink(public_path($gimnasios->logo));
-        }
-
-        // Delete the gym from the database
-        $gimnasios->delete();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Gimnasio eliminado exitosamente',
-        ],200);
->>>>>>> 89b1880174201d7e73f199fe1afcb3605f54f880
     }
 }
