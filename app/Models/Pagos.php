@@ -12,11 +12,17 @@ class Pagos extends Model
     protected $collection = "pagos";
 
     protected $fillable = [
-        'cod_usuario',
-        'foto',
-        'fecha_subida',
+        'id_usuario',
+        'fecha',
         'nro_operacion',
         'monto',
-        'estado'
+        'estado',
+        'foto',
     ];
+
+    public function usuarios()
+    {
+        return $this->belongsTo(usuarios::class, 'id_usuario');
+    }
+
 }

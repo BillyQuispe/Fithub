@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pagos', function (Blueprint $table) {
+        Schema::create('asistencias', function (Blueprint $table) {
             $table->id();
             $table->integer('id_usuarios');
-            $table->date('fecha');
-            $table->string('nro_operacion');
-            $table->decimal('monto', 8, 2);
-            $table->string('estado');
-            // Agregar el nuevo campo 'foto'
-            $table->string('foto');
             $table->timestamps();
             $table->foreign('id_usuarios')->references('id')->on('usuarios');
         });
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pagos');
+        Schema::dropIfExists('asistencias');
     }
 };

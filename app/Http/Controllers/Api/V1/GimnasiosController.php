@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Gimnasios;
 use Illuminate\Http\Request;
-use App\Http\Resources\V1\GimnasioResource;
-use App\Http\Resources\V1\GimnasioCollection;
+use Illuminate\Support\Facades\Validator;
 
 class GimnasiosController extends Controller
 {
@@ -17,20 +16,14 @@ class GimnasiosController extends Controller
      */
     public function index()
     {
-        // Retrieve all the existing gyms from the database
-        $gyms = Gimnasios::all();
+        $gimnasios = Gimnasios::all();
 
-        if ($gyms->isEmpty()) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'No se encontraron gimnasios',
-            ], 400);
-        }
+
 
         return response()->json([
             'status' => 200,
-            'message' => 'Se han encontrado gimnasios',
-            'data' => $gyms,
+            'message' => 'Se encontraron ' . $gimnasios->count() . ' gimnasios en la base de datos.',
+            'data' => $gimnasios,
         ]);
     }
 
@@ -42,48 +35,58 @@ class GimnasiosController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the input data
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'nombre' => 'required|string',
-            'logo' => 'required|image',
             'geolocalizacion' => 'required|string',
             'ruc' => 'required|string',
             'aforo' => 'required|integer',
             'horarios_atencion' => 'required|string',
         ]);
 
-        // Save the uploaded image
-        $logoPath = $request->file('logo')->move('images', $request->file('logo')->getClientOriginalName());
+        if ($validatedData->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Datos inválidos',
+                'error' => $validatedData->errors(),
+            ], 400);
+        }
 
-        // Create a new gym
-        $gym = Gimnasios::create([
-            'nombre' => $validatedData['nombre'],
-            'logo' => $logoPath,
-            'geolocalizacion' => $validatedData['geolocalizacion'],
-            'ruc' => $validatedData['ruc'],
-            'aforo' => $validatedData['aforo'],
-            'horarios_atencion' => $validatedData['horarios_atencion'],
+        $gimnasio = Gimnasios::create([
+            'nombre' => $request->input('nombre'),
+            'geolocalizacion' => $request->input('geolocalizacion'),
+            'ruc' => $request->input('ruc'),
+            'aforo' => $request->input('aforo'),
+            'horarios_atencion' => $request->input('horarios_atencion'),
         ]);
 
         return response()->json([
             'status' => 200,
             'message' => 'Gimnasio creado exitosamente',
-            'data' => $gym,
+            'data' => $gimnasio,
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Gimnasios  $gimnasios
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Gimnasios $gimnasios)
+    public function show($id)
     {
+        $gimnasio = Gimnasios::find($id);
+
+        if (!$gimnasio) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'No se encontró el gimnasio',
+            ], 400);
+        }
+
         return response()->json([
             'status' => 200,
-            'message' => 'Gimnasio encontrado',
-            'data' => $gimnasios,
+            'message' => 'Se encontró el gimnasio',
+            'data' => $gimnasio,
         ]);
     }
 
@@ -91,77 +94,83 @@ class GimnasiosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Gimnasios  $gimnasios
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Gimnasios $gimnasios)
+    public function update(Request $request, $id)
     {
-        // Validate the input data
-        $validatedData = $request->validate([
+        $gimnasio = Gimnasios::find($id);
+
+        if (!$gimnasio) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'No se encontró el gimnasio',
+            ], 400);
+        }
+
+        $validatedData = Validator::make($request->all(), [
             'nombre' => 'string',
-            'logo' => 'image',
             'geolocalizacion' => 'string',
             'ruc' => 'string',
             'aforo' => 'integer',
             'horarios_atencion' => 'string',
         ]);
 
-        // Update the gym's fields if provided
-        if ($request->filled('nombre')) {
-            $gimnasios->nombre = $validatedData['nombre'];
+        if ($validatedData->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Datos inválidos',
+                'error' => $validatedData->errors(),
+            ], 400);
         }
-        if ($request->hasFile('logo')) {
-            // Delete the previous logo
-            if (file_exists(public_path($gimnasios->logo))) {
-                unlink(public_path($gimnasios->logo));
-            }
 
-            // Save the new logo image
-            $logoPath = $request->file('logo')->move('images', $request->file('logo')->getClientOriginalName());
-            $gimnasios->logo = $logoPath;
+        if ($request->filled('nombre')) {
+            $gimnasio->nombre = $request->input('nombre');
         }
         if ($request->filled('geolocalizacion')) {
-            $gimnasios->geolocalizacion = $validatedData['geolocalizacion'];
+            $gimnasio->geolocalizacion = $request->input('geolocalizacion');
         }
         if ($request->filled('ruc')) {
-            $gimnasios->ruc = $validatedData['ruc'];
+            $gimnasio->ruc = $request->input('ruc');
         }
         if ($request->filled('aforo')) {
-            $gimnasios->aforo = $validatedData['aforo'];
+            $gimnasio->aforo = $request->input('aforo');
         }
         if ($request->filled('horarios_atencion')) {
-            $gimnasios->horarios_atencion = $validatedData['horarios_atencion'];
+            $gimnasio->horarios_atencion = $request->input('horarios_atencion');
         }
 
-        // Save the updated gym
-        $gimnasios->save();
+        $gimnasio->save();
 
         return response()->json([
             'status' => 200,
             'message' => 'Gimnasio actualizado exitosamente',
-            'data' => $gimnasios,
+            'data' => $gimnasio,
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Gimnasios  $gimnasios
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Gimnasios $gimnasios)
+    public function destroy($id)
     {
-        // Delete the gym's logo
-        if (file_exists(public_path($gimnasios->logo))) {
-            unlink(public_path($gimnasios->logo));
+        $gimnasio = Gimnasios::find($id);
+
+        if (!$gimnasio) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'No se encontró el gimnasio',
+            ], 400);
         }
 
-        // Delete the gym from the database
-        $gimnasios->delete();
+        $gimnasio->delete();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Gimnasio eliminado exitosamente',
-        ],200);
+            'message' => 'Gimnasio eliminado correctamente',
+        ], 200);
     }
 }
