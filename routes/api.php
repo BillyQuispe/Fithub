@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 // ****** LOGIN ********
 Route::post('login',[App\Http\Controllers\Api\LoginController::class, 'login']);
-Route::apiResource('register',\App\Http\Controllers\Api\RegisterController::class)->only('store','show','update','destroy');
+Route::get('register', [\App\Http\Controllers\Api\RegisterController::class, 'index']);
+
+
 //
 
 Route::apiResource('v1/gimnasios',\App\Http\Controllers\Api\V1\GimnasiosController::class)->only('show','store','update','destroy');
