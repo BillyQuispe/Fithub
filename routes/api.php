@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 // ****** LOGIN ********
 Route::post('login',[App\Http\Controllers\Api\LoginController::class, 'login']);
+Route::post('reniec',[App\Http\Controllers\Api\ReniecController::class, 'consultar']);
 Route::apiResource('register',\App\Http\Controllers\Api\RegisterController::class)->only('store','show','update','destroy');
 //
-
+Route::apiResource('v1/users',\App\Http\Controllers\Api\V1\UserController::class);
 Route::apiResource('v1/gimnasios',\App\Http\Controllers\Api\V1\GimnasiosController::class)->only('show','store','update','destroy');
 
 Route::apiResource('v1/pagos', \App\Http\Controllers\Api\V1\PagosController::class);
@@ -41,6 +42,14 @@ Route::apiResource('v1/usuarios', \App\Http\Controllers\Api\V1\UsuariosControlle
 Route::put('v1/usuarios/{usuario}', [\App\Http\Controllers\Api\V1\UsuariosController::class, 'update'])->name('usuarios.update');
 Route::delete('v1/usuarios/{usuario}', [\App\Http\Controllers\Api\V1\UsuariosController::class, 'destroy'])->name('usuarios.destroy');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Rutas que requieren autenticación
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    
+    // ...
 });
+
+
